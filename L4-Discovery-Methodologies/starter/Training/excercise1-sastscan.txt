@@ -1,0 +1,46 @@
+Test results:
+>> Issue: [B107:hardcoded_password_default] Possible hardcoded password: 'root'
+   Severity: Low   Confidence: Medium
+   Location: Training/exercise1.py:13
+   More Info: https://bandit.readthedocs.io/en/latest/plugins/b107_hardcoded_password_default.html
+12	
+13	def doLogin2(password='root'):
+14	    if password == 'root':
+15	        print("YES")
+16	    else:
+17	        print("NO, :(")
+18	
+19	def createUser(username, password='pasword'):
+
+--------------------------------------------------
+>> Issue: [B107:hardcoded_password_default] Possible hardcoded password: 'pasword'
+   Severity: Low   Confidence: Medium
+   Location: Training/exercise1.py:19
+   More Info: https://bandit.readthedocs.io/en/latest/plugins/b107_hardcoded_password_default.html
+18	
+19	def createUser(username, password='pasword'):
+20	    user = User(username, password)
+21	    user.process()
+22	
+23	
+24	class User(db.Model):
+
+--------------------------------------------------
+>> Issue: [B303:blacklist] Use of insecure MD2, MD4, MD5, or SHA1 hash function.
+   Severity: Medium   Confidence: High
+   Location: Training/exercise1.py:32
+   More Info: https://bandit.readthedocs.io/en/latest/blacklists/blacklist_calls.html#b303-md5
+31	        self.username = username
+32	        self.password = hashlib.md5(password.encode('utf-8')).hexdigest()
+33	        self.resetcode = ''.join(random.choice(string.ascii_lowercase) for i in range(16))
+
+--------------------------------------------------
+>> Issue: [B311:blacklist] Standard pseudo-random generators are not suitable for security/cryptographic purposes.
+   Severity: Low   Confidence: High
+   Location: Training/exercise1.py:33
+   More Info: https://bandit.readthedocs.io/en/latest/blacklists/blacklist_calls.html#b311-random
+32	        self.password = hashlib.md5(password.encode('utf-8')).hexdigest()
+33	        self.resetcode = ''.join(random.choice(string.ascii_lowercase) for i in range(16))
+34	
+
+--------------------------------------------------

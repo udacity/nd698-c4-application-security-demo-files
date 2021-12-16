@@ -1,0 +1,136 @@
+{% extends "layout/insidepage.html" %}
+
+{% block cssfile %}
+{% endblock %}
+
+{% block content %}
+<div class="box">
+    <div class="box-body">
+        Page Controls:
+        <button type="button" class="btn btn-danger btn-xs" onclick="reset()">reset</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="info-box">
+            <span class="info-box-icon bg-aqua"><i class="ion ion-ios-gear-outline"></i></span>
+
+            <div class="info-box-content">
+                <span class="info-box-text">Reflected/DOM XSS</span>
+                <span class="info-box-number" id="name"></span>
+            </div>
+        </div>
+
+        <div class="box box-primary direct-chat direct-chat-primary" data-ol-has-click-handler="">
+            <div class="box-header with-border">
+                <h3 class="box-title">Stored XSS</h3>
+                <div class="box-tools pull-right"></div>
+            </div>
+            <div class="box-body">
+                <div id="direct-chat-messages" class="direct-chat-messages"></div>
+            </div>
+            <div class="box-footer">
+                <div class="input-group">
+                    <input type="text" id="message" name="message" placeholder="Type Message ..." class="form-control">
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-primary btn-flat" onclick="sendMsg()">Send</button>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="box" data-ol-has-click-handler="">
+            <div class="box-header with-border">
+                <h3 class="box-title">XSS Results</h3>
+            </div>
+            <div class="box-body">
+                <div id="url">URL:<br>{{rawurl}}</div>
+                <div id="postdata"><hr>POSTDATA:<br>{{data}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jsfile %}
+{% endblock %}
+
+{% block jsscript %}
+
+<script>
+    my_id = 2;
+    urlVars = {}
+    msgTemplate = '<div class="direct-chat-msg [[DIRECTION]]"><div class="direct-chat-info clearfix"><span class="direct-chat-name pull-right">[[NAME]]</span></div><img class="direct-chat-img" src="[[IMG]]" alt="Message User Image"><div class="direct-chat-text">[[MESSAGE]]</div></div>';
+
+    $(document).ready(function () {
+        urlVars = getUrlVars();
+
+        displayname();
+        loadMsg();
+    });
+
+    function reset() {
+        apiGET('reset', '', function (data) { alert(data.message) })
+    }
+
+    function getUrlVars() {
+        var vars = [], hash;
+        var hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+        for (var i = 0; i < hashes.length; i++) {
+            hash = hashes[i].split('=');
+            vars.push(hash[0]);
+            vars[hash[0]] = hashes[i].replace(hash[0]+"=",'').replace(/%3C/g, '<').replace(/%3E/g, '>').replace(/%22/g, '"').replace(/%20/g, ' ');
+        }
+        return vars;
+    }
+
+    function displayname() {
+        var name = urlVars["name"];
+        console.info(name)
+        if (name != undefined) {
+            $('#name').html(name);
+        }
+    }
+
+    function loadMsg() {
+        $('#direct-chat-messages').html('');
+        apiGET('xss/getMsg/1', '', function (data) {
+            $.each(data, function (index, d) {
+                user_id = d[1]
+                msg = d[2]
+                name = d[3]
+
+                tmpMSG = msgTemplate;
+                tmpMSG = tmpMSG.replace("[[DIRECTION]]", user_id != my_id ? '' : 'right')
+                tmpMSG = tmpMSG.replace("[[NAME]]", name)
+                tmpMSG = tmpMSG.replace("[[IMG]]", '/img/user2.png')
+                tmpMSG = tmpMSG.replace("[[MESSAGE]]", msg)
+
+                $('#direct-chat-messages').append(tmpMSG);
+            });
+        })
+    }
+
+    function sendMsg() {
+        postdata = {
+            "msg": $('#message').val()
+        }
+
+        apiPOST('xss/sendMsg/1', '', postdata, function (data) {
+            console.info(data);
+
+            $('#message').val('')
+            loadMsg();
+
+            $('#url').html('');
+            $('#postdata').html('');
+            $('#url').append(data.rawurl);
+            $('#postdata').append(data.postdata["message"].replace(/</g, '%3C').replace(/>/g, '%3E'));
+        });
+    }
+</script>
+{% endblock %}

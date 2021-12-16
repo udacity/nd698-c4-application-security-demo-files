@@ -1,0 +1,127 @@
+{% extends "layout/insidepage.html" %}
+
+{% block cssfile %}
+{% endblock %}
+
+{% block content %}
+<div class="box">
+    <div class="box-body">
+        Page Controls:
+        <button type="button" class="btn btn-danger btn-xs" onclick="reset()">reset</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box" data-ol-has-click-handler="">
+            <div class="box-header with-border">
+                <h3 class="box-title">Login Form 1</h3>
+            </div>
+            <form class="form-horizontal" method="POST" action="">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">Username</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="username" name="username" placeholder="Username" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-sm-2 control-label">Password</label>
+
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-info pull-right">Sign in</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="box" data-ol-has-click-handler="">
+            <div class="box-header with-border">
+                <h3 class="box-title">Login Results</h3>
+            </div>
+            <div class="box-body">
+                <div id="results">{{results}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box" data-ol-has-click-handler="">
+            <div class="box-header with-border">
+                <h3 class="box-title">Login Form 2</h3>
+            </div>
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="username2" class="col-sm-2 control-label">Username</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="username2" placeholder="Username" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password2" class="col-sm-2 control-label">Password</label>
+
+                        <div class="col-sm-10">
+                            <input type="password" class="form-control" id="password2" placeholder="Password" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" class="btn btn-info pull-right" onclick="login()">Sign in</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="box" data-ol-has-click-handler="">
+            <div class="box-header with-border">
+                <h3 class="box-title">Login Results</h3>
+            </div>
+            <div class="box-body">
+                <div id="results2"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jsfile %}
+{% endblock %}
+
+{% block jsscript %}
+<script>
+    $(document).ready(function () {
+    });
+
+    function reset() {
+        apiGET('reset', '', function (data) { alert(data.message) })
+    }
+    
+    function login() {
+        username = $('#username2').val();
+        password = $('#password2').val();
+
+        data = "username=" + username + "&password=" + password
+        apiGET('brokenauth/login2', data, function (data) {
+            $("#results2").html(data);
+        })
+    }
+
+</script>
+{% endblock %}

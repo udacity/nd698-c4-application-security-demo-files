@@ -1,0 +1,10 @@
+Test results:
+>> Issue: [B413:blacklist] The pyCrypto library and its module MD5 are no longer actively maintained and have been deprecated. Consider using pyca/cryptography library.
+   Severity: High   Confidence: High
+   Location: hashes.py:2
+   More Info: https://bandit.readthedocs.io/en/latest/blacklists/blacklist_imports.html#b413-import-pycrypto
+1	from cryptography.hazmat.primitives import hashes
+2	from Crypto.Hash import MD5
+3	import hashlib
+
+--------------------------------------------------

@@ -1,0 +1,5 @@
+Version 1.1
+self.createTable('friendlist', 'CREATE TABLE friendlist (id SERIAL PRIMARY KEY, firstname TEXT, lastname TEXT, email TEXT NOT NULL, password TEXT NOT NULL);')
+
+Version 1.2
+self.createTable('friendlist', 'CREATE TABLE friendlist (id SERIAL PRIMARY KEY, firstname TEXT, lastname TEXT, password TEXT NOT NULL, email TEXT NOT NULL);')

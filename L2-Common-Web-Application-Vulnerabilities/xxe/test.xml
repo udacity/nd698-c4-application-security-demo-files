@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<!DOCTYPE test [
+    <!ENTITY getdata SYSTEM "secretdata.txt">
+]>
+<root>
+    <data>&getdata;</data>
+</root>

@@ -1,0 +1,142 @@
+{% extends "layout/insidepage.html" %}
+
+{% block cssfile %}
+{% endblock %}
+
+{% block content %}
+<div class="box">
+    <div class="box-body">
+        Page Controls:
+        <button type="button" class="btn btn-danger btn-xs" onclick="reset()">reset</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="box" data-ol-has-click-handler="">
+            <div class="box-header with-border">
+                <h3 class="box-title">Login Form</h3>
+            </div>
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="username" class="col-sm-2 control-label">Username</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="username" placeholder="Username" value="johndoe">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="password" class="col-sm-2 control-label">Password</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="password" placeholder="Password" value="MySecurePassword">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" class="btn btn-info pull-right" onclick="login()">Sign in</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <div class="box" data-ol-has-click-handler="">
+            <div class="box-header with-border">
+                <h3 class="box-title">Login Results</h3>
+            </div>
+            <div class="box-body">
+                <div id="results"></div>
+                <div id="data"></div>
+                <div id="sqlinfo"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="box">
+    <div class="box-body">
+        <div class="form-group">
+            Querystring: http://0.0.0.0/sqlisafe/users/<input type="text" id="id" placeholder="id" value="2">
+        </div>
+    
+        <h3>Users List<button type="button" class="btn btn-box-tool" onclick="getUsers()"><i
+                    class="fa fa-refresh"></i></button></h3>
+        <table id="usertable" class="table table-bordered">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box" data-ol-has-click-handler="">
+        <div class="box-header with-border">
+            <h3 class="box-title">Login Results</h3>
+        </div>
+        <div class="box-body">
+            <div id="results2"></div>
+            <div id="data2"></div>
+            <div id="sqlinfo2"></div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jsfile %}
+{% endblock %}
+
+{% block jsscript %}
+<script>
+    $(document).ready(function () {
+        getUsers();
+    });
+
+    function reset() {
+        apiGET('reset', '', function (data) { alert(data.message) })
+    }
+
+    function login() {
+        username = $('#username').val();
+        password = $('#password').val();
+
+        postdata = {
+            "username": username,
+            "password": password
+        }
+
+        $("#results").html("");
+        $("#sqlinfo").html("");
+        apiPOST('sqlisafe/login', '', postdata, function (results) {
+            $("#results").html("User Login: " + results.auth);
+
+            $("#sqlinfo").html("<hr>SQL Query:<br>" + results.sql);
+
+            $("#data").html("<hr>SQL Data:<br>");
+            $.each(results.data, function (key, Obj) {
+                $("#data").append("<div>" + Obj + "</div>");
+            });
+        })
+    }
+
+    function getUsers() {
+        $("#usertable tbody").html('<tr><th style="width: 10px">ID</th><th>Role</th><th>First Name</th><th>Last Name</th><th>Username</th></tr>')
+        apiGET('sqlisafe/users/' + $('#id').val(), '', function (results) {
+            $.each(results.data, function (key, Obj) {
+                $("#usertable").append('<tr><th>' + Obj[0] + '</th><th>' + Obj[1] + '</th><th>' + Obj[2] + '</th><th>' + Obj[3] + '</th><th>' + Obj[4] + '</th></tr>')
+            });
+
+            $("#results2").html("successful: " + results.successful);
+
+            $("#sqlinfo2").html("<hr>SQL Query:<br>" + results.sql);
+
+            $("#data2").html("<hr>SQL Data:<br>");
+            $.each(results.data, function (key, Obj) {
+                $("#data2").append("<div>" + Obj + "</div>");
+            });
+        })
+    }
+</script>
+{% endblock %}

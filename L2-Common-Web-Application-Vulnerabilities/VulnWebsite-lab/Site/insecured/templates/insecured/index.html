@@ -1,0 +1,41 @@
+{% extends "layout/insidepage.html" %}
+
+{% block cssfile %}
+{% endblock %}
+
+{% block content %}
+<div class="box">
+    <div class="box-body">
+        Page Controls:
+        <button type="button" class="btn btn-danger btn-xs" onclick="reset()">reset</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="box" data-ol-has-click-handler="">
+            <ul>
+                <li><a href="admin-area">Admin Area</a></li>
+                <li><a href="pdoe-area">pdoe Private Area</a></li>
+                <li><a href="mdoe-accounting-area">mdoe Private Accounting Area</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jsfile %}
+{% endblock %}
+
+{% block jsscript %}
+<script>
+    $(document).ready(function () {
+    });
+
+    function reset() {
+        apiGET('reset', '', function (data) { alert(data.message) })
+    }    
+    
+</script>
+{% endblock %}

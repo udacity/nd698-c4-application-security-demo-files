@@ -1,0 +1,5 @@
+<ol class="breadcrumb">
+    {%- for breadcrumb in breadcrumbs -%}
+        <li class="{{ 'active' if loop.last }}"><a href="{{ breadcrumb.url }}">{{ breadcrumb.text }}</a></li>
+    {%- endfor -%}
+</ol>

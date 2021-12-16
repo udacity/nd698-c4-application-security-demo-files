@@ -1,0 +1,93 @@
+{% extends "layout/insidepage.html" %}
+
+{% block cssfile %}
+{% endblock %}
+
+{% block content %}
+<div class="box">
+    <div class="box-body">
+        Page Controls:
+        <button type="button" class="btn btn-danger btn-xs" onclick="reset()">reset</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="box" data-ol-has-click-handler="">
+            <div class="box-header with-border">
+                <h3 class="box-title">Hash Cracking</h3>
+            </div>
+            <form class="form-horizontal">
+                <div class="box-body">
+                    <div class="form-group">
+                        <label for="hash" class="col-sm-2 control-label">Hash</label>
+
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="hash" placeholder="Hash" value="">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="hashtype" class="col-sm-2 control-label">Type</label>
+
+                        <div class="col-sm-10">
+                            <select class="form-control" id="hashtype" name="hashtype">
+                                <option value="">Select Hash Type</option>
+                                <option value="MD5">MD5</option>
+                                <option value="SHA-1">SHA-1</option>
+                                <option value="SHA-256">SHA-256</option>
+                                <option value="SHA-512">SHA-512</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="button" class="btn btn-info pull-right" onclick="hashcrack()">Process</button>
+                        </div>
+                    </div>
+                    <div id="results">
+                    </div>
+                </div>
+            </form>
+            <div class="box-footer">
+                <div><small>This data is provided by hashes.org</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jsfile %}
+{% endblock %}
+
+{% block jsscript %}
+
+<script>
+
+    $(document).ready(function () {
+    });
+
+    function reset() {
+        apiGET('reset', '', function (data) { alert(data.message) })
+    }
+
+    function hashcrack() {
+        if ($("#hashtype option:selected").val() == "") {
+            alert('Please select hash type!')
+        } else {
+            apiGET('tool/hashcrackingtype/' + $("#hashtype option:selected").val() + '/' + $('#hash').val(), '', function (results) {
+                $("#results").html('<hr>');
+
+                if (results != undefined && results != null) {
+                    $("#results").append('<br>Algorithm: ' + results.algorithm.replace('PLAIN', ''));
+                    $("#results").append('<br>Plaintext: ' + results.plain);
+                } else {
+                    $("#results").append('<br>Sorry we were unable to crack your hash.');
+                }
+            })
+        }
+    }
+
+</script>
+{% endblock %}

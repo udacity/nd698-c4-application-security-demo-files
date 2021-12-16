@@ -1,37 +1,54 @@
-# Purpose of This Repo
+# ND698 Security Engineer Nanodegree Program
+ 
+Course: Application Security
+Instructor: Dev Badlu
 
-This repo is meant to be used to keep things organized during content development and act as the source of truth for all projects and exercises related to this course.
+
+This repository contains the lesson-wise starter/solution code shown in the classroom video demos.
 
 ## Folder Structure
 
-### Lesson Folder
-
-This repo contains a folder for each `lesson` and one `project` folder.
-
-Example
+```bash
+.
+├── CODEOWNERS
+├── L2-Common-Web-Application-Vulnerabilities
+│   ├── VulnWebsite-lab
+│   ├── tools
+│   │   ├── bruteforce.py
+│   │   ├── fuzz.py
+│   │   ├── requirements.txt
+│   │   ├── test-filename.txt
+│   │   ├── test-password.txt
+│   │   └── test-username.txt
+│   └── xxe
+├── L3-Web-Penetration-Testing
+│   ├── VulnWebsite-lab
+│   └── tools
+│       ├── bruteforce.py
+│       ├── checkhash.py
+│       ├── hashid.py
+│       ├── performbase64.py
+│       ├── requirements.txt
+│       ├── test-password.txt
+│       └── test-username.txt
+├── L4-Discovery-Methodologies
+│   ├── solution
+│   │   ├── excercise1-solution.txt
+│   │   ├── excercise2-solution.txt
+│   │   └── excercise3-solution.txt
+│   └── starter
+│       ├── ExerciseCode
+│       ├── Training
+│       └── WalkThru
+├── L5-Vulnerability-Response
+│   ├── Test-Project-Template.docx
+│   ├── Test-Project-Template.odt
+│   ├── Test-Project-Writeup-Part1.pdf
+│   ├── Test-Project-Writeup-Part2.pdf
+│   └── Test-Project-Writeup-Part3.pdf
+├── LICENSE.md
+└── README.md
 ```
-lesson-1-hello
-lesson-2-world
-lesson-3-foo
-lesson-4-bar
-project
-```
 
-Each `lesson` folder is named using the naming convention of `lesson-#-name-of-lesson`.
-
-Example
-```
-lesson-1-hello
-```
-
-Four lesson folders have been provided as a template; However, you may need to add more or possibly use less than four depending on what is needed.
-
-If you require an additional lesson folder, you can make a copy of the folder and paste it into the root directory.
-
-### Exercises Folder
-
-Each `lesson` folder contains an `exercises` folder. This `exercises` folder should contain all files and instructions necessary for the exercises along with the solution. The solutions for these exercises will be shared with students. See the `README` in the `exercises` folder for information about folder structure.
-
-### Project Folder
-
-The `project` folder should contain all files and instructions necessary for setup. If possible, a set of instructions should be provided for both Udacity workspaces and a way to work locally (for both MacOS and Windows OS). At a minimum, one set of instructions should be provided. A `README` template has been provided in the project folder. This template layout should be used to write your README.
+## Contributing to the Repo
+Should you notice an error in the existing code or scope of improvement, feel free to submit a [Pull Request here](https://github.com/udacity/nd698-c4-application-security-demo-files/pulls). 

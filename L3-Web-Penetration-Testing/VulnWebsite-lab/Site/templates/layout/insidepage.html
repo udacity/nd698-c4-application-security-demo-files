@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>{{ siteInfo.siteName }} | {{ title }}</title>
+  <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
+  <link rel="stylesheet" href="/css/jquery-ui.min.css">
+  <link rel="stylesheet" href="/css/bootstrap.css">
+  <link rel="stylesheet" href="/css/font-awesome.css">
+  <link rel="stylesheet" href="/css/ionicons.css">
+  <link rel="stylesheet" href="/css/adminlte.css">
+  <link rel="stylesheet" href="/css/adminlte.blue.css">
+
+  <!--[if lt IE 9]>
+  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+  <![endif]-->
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <link rel="stylesheet" href="/css/general.css">
+  {% block cssfile %}
+  {% endblock %}
+
+  {% block css %}
+  {% endblock %}
+
+  <script src="/js/jquery.js"></script>
+  <script src="/js/jquery-ui.min.js"></script>
+  <script src="/js/bootstrap.js"></script>
+
+</head>
+
+<body class="hold-transition skin-blue sidebar-mini">
+  <div class="wrapper">
+
+    <header class="main-header">
+      {% include 'partials/topnav.html' %}
+    </header>
+
+    {% include 'partials/sidebar.html' %}
+
+    <div class="content-wrapper">
+      <section class="content-header">
+        <h1>
+          {{ title }}
+          <small id="header-desc">{{ description }}</small>
+        </h1>
+        {% include 'partials/breadcrumbs.html' %}
+      </section>
+
+      <section class="content">
+        {% block content %}
+        {% endblock %}
+      </section>
+    </div>
+    {% include 'partials/footer.html' %}
+  </div>
+
+  <script src="/js/jquery.slimscroll.js"></script>
+  <script src="/js/fastclick.js"></script>
+  <script src="/js/jquery.keepAlive.js"></script>
+  <script src="/js/underscore.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/jquery.validate.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.17.0/additional-methods.min.js"></script>
+  <script src="/js/adminlte.js"></script>
+
+  {% block jsfile %}
+  {% endblock %}
+
+  <script>
+    $(document).ready(function () {
+      $('.sidebar-menu').tree()
+      $('.sidebar-menu a').each(function (i, o) {
+        if (o.href == window.location.href.replace('#', '') || (window.location.href.indexOf(o.href) >= 0 && o.pathname != "/")) {
+          $(o).parent().addClass("active").closest('li.treeview').addClass("active").addClass("menu-open")
+        }
+      });
+    })
+  </script>
+
+  {% block jsscript %}
+  {% endblock %}
+
+  <script>
+    function apiGET(endpoint, querystring, cb) {
+      if (querystring != '') endpoint = endpoint + '?' + querystring;
+      $.ajax({
+        url: '/' + endpoint,
+        type: "GET",
+        cache: false,
+        dataType: 'json',
+        headers: { 'Access-Control-Allow-Origin': '*' },
+        success: function (data) { cb(data); }
+      });
+    };
+
+    function apiPOST(endpoint, querystring, jsondata, cb) {
+      if (querystring != '') endpoint = endpoint + '?' + querystring;
+      $.ajax({
+        url: '/' + endpoint,
+        type: "POST",
+        cache: false,
+        data: jsondata,
+        dataType: 'json',
+        headers: {'Access-Control-Allow-Origin': '*'},
+        success: function (data) { cb(data); }
+      });
+    };
+  </script>
+</body>
+
+</html>

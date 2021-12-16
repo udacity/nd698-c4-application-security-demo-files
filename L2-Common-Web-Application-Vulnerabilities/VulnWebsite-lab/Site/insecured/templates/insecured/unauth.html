@@ -1,0 +1,40 @@
+{% extends "layout/insidepage.html" %}
+
+{% block cssfile %}
+{% endblock %}
+
+{% block content %}
+<div class="box">
+    <div class="box-body">
+        Page Controls:
+        <button type="button" class="btn btn-danger btn-xs" onclick="reset()">reset</button>
+    </div>
+</div>
+
+<h1>ACCESS DENIED</h1>
+{% endblock %}
+
+{% block jsfile %}
+{% endblock %}
+
+{% block jsscript %}
+<script>
+    $(document).ready(function () {
+    });
+
+    function reset() {
+        apiGET('reset', '', function (data) { alert(data.message) })
+    }
+
+    function getSecrets() {
+        $("#usertable tbody").html('<tr><th style="width: 10px">ID</th><th>Role</th><th>First Name</th><th>Last Name</th><th>Username</th></tr>')
+        apiGET('brokenaccess/secrets', '', function (results) {
+            $.each(results.data, function (key, Obj) {
+                $("#usertable").append('<tr><th>' + Obj[0] + '</th><th>' + Obj[1] + '</th><th>' + Obj[2] + '</th><th>' + Obj[3] + '</th><th>' + Obj[4] + '</th></tr>')
+            });
+        })
+    }
+    
+    
+</script>
+{% endblock %}

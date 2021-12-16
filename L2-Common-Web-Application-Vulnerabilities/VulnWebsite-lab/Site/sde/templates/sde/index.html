@@ -1,0 +1,85 @@
+{% extends "layout/insidepage.html" %}
+
+{% block cssfile %}
+{% endblock %}
+
+{% block content %}
+<div class="box">
+    <div class="box-body">
+        Page Controls:
+        <button type="button" class="btn btn-danger btn-xs" onclick="reset()">reset</button>
+    </div>
+</div>
+
+<div class="box">
+    <div class="box-body">
+        <h3>Friends List<button type="button" class="btn btn-box-tool" onclick="getFriends()"><i class="fa fa-refresh"></i></button></h3>
+        <table id="friendtable" class="table table-bordered">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="box">
+    <div class="box-body">
+        <h3>Customers List<button type="button" class="btn btn-box-tool" onclick="getCustomers()"><i
+                    class="fa fa-refresh"></i></button></h3>
+        <table id="customertable" class="table table-bordered">
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jsfile %}
+{% endblock %}
+
+{% block jsscript %}
+
+<script>
+
+    $(document).ready(function () {
+        getFriends();
+        getCustomers();
+    });
+
+    function reset() {
+        apiGET('reset', '', function (data) { alert(data.message) })
+    }
+
+    function hashcrack() {
+        apiGET('sde/crackhash/' + $('#hash').val(), '', function (results) {
+            $("#results").html('<hr>');
+
+            if (results != undefined && results != null) {
+                $("#results").append('<br>Algorithm: ' + results.algorithm.replace('PLAIN', ''));
+                $("#results").append('<br>Plaintext: ' + results.plain);
+            } else {
+                $("#results").append('<br>Sorry we were unable to crack your hash.');
+            }
+        })
+    }
+
+    function getFriends() {
+        $("#friendtable tbody").html('<tr><th style="width: 10px">ID</th><th>First Name</th><th>Last Name</th><th>Email</th></tr>')
+        apiGET('sde/friendlist/', '', function (results) {
+            $.each(results.data, function (key, Obj) {
+                $("#friendtable").append('<tr><th>' + Obj[0] + '</th><th>' + Obj[1] + '</th><th>' + Obj[2] + '</th><th>' + Obj[3] + '</th></tr>')
+            });
+        })
+    }
+
+    function getCustomers() {
+        $("#customertable tbody").html('<tr><th style="width: 10px">ID</th><th>First Name</th><th>Last Name</th><th>Username</th></tr>')
+        apiGET('sde/customers/', '', function (results) {
+            $.each(results.data, function (key, Obj) {
+                $("#customertable").append('<tr><th>' + Obj[0] + '</th><th>' + Obj[1] + '</th><th>' + Obj[2] + '</th><th>' + Obj[3] + '</th></tr>')
+            });
+        })
+    }
+
+</script>
+{% endblock %}

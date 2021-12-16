@@ -1,0 +1,69 @@
+{% extends "layout/insidepage.html" %}
+
+{% block cssfile %}
+{% endblock %}
+
+{% block content %}
+<div class="box">
+    <div class="box-body">
+        Page Controls:
+        <button type="button" class="btn btn-danger btn-xs" onclick="reset()">reset</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="box box-primary" data-ol-has-click-handler="">
+            
+            <div class="box-body box-profile">
+                <!-- FIX: Security issue with sqli the profile async -->
+                <h3 class="profile-username text-center"><span id="name"></span><button type="button" class="btn btn-box-tool" onclick="getUserInfo()"><i class="fa fa-refresh"></i></button></h3>
+
+                <p id="username" class="text-muted text-center"></p>
+
+                <ul class="list-group list-group-unbordered">
+                    <li class="list-group-item">
+                        <b>Role</b> <a id="role" class="pull-right"></a>
+                    </li>
+                    <li class="list-group-item">
+                        <b>ID</b> <a id="id" class="pull-right"></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jsfile %}
+{% endblock %}
+
+{% block jsscript %}
+<script>
+    $(document).ready(function () {
+        $('*').contents().each(function () {
+            if (this.nodeType === Node.COMMENT_NODE) {
+                $(this).remove();
+            }
+        });
+
+        getUserInfo();
+    });
+
+    function reset() {
+        apiGET('reset', '', function (data) { alert(data.message) })
+    }
+
+    function getUserInfo() {
+        apiGET('recon/userinfo/', '', function (data) {
+            $.each(data, function (key, Obj) {
+                $('#name').html(Obj[2] + " " + Obj[3]);
+                $('#username').html(Obj[4]);
+                $('#role').html(Obj[1]);
+                $('#id').html(Obj[0]);
+            })
+        })
+    }
+</script>
+{% endblock %}

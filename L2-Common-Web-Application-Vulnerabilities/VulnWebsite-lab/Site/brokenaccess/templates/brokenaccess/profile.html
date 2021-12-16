@@ -1,0 +1,110 @@
+{% extends "layout/insidepage.html" %}
+
+{% block cssfile %}
+{% endblock %}
+
+{% block content %}
+<div class="box">
+  <div class="box-body">
+    Page Controls:
+    <button type="button" class="btn btn-danger btn-xs" onclick="reset()">reset</button>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-md-3">
+
+    <!-- Profile Image -->
+    <div class="box box-primary">
+      <div class="box-body box-profile">
+        <img class="profile-user-img img-responsive img-circle" src="/img/user2.png" alt="User profile picture">
+
+        <h3 class="profile-username text-center"></h3>
+
+        <p class="profile-role text-muted text-center"></p>
+
+        <ul class="list-group list-group-unbordered">
+          <li class="list-group-item">
+            <b>Followers</b> <a class="pull-right">1,322</a>
+          </li>
+          <li class="list-group-item">
+            <b>Following</b> <a class="pull-right">543</a>
+          </li>
+          <li class="list-group-item">
+            <b>Friends</b> <a class="pull-right">13,287</a>
+          </li>
+        </ul>
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+
+    <!-- About Me Box -->
+    <div class="box box-primary">
+      <div class="box-header with-border">
+        <h3 class="box-title">About Me</h3>
+      </div>
+      <!-- /.box-header -->
+      <div class="box-body">
+        <strong><i class="fa fa-book margin-r-5"></i> Education</strong>
+
+        <p class="text-muted">
+          Security Engineer Nanodegree from Udacity
+        </p>
+
+        <hr>
+
+        <strong><i class="fa fa-map-marker margin-r-5"></i> Location</strong>
+
+        <p class="text-muted">International Space Station, Outer Space</p>
+
+        <hr>
+
+        <strong><i class="fa fa-pencil margin-r-5"></i> Skills</strong>
+
+        <p>
+          <span class="label label-success">Coding</span>
+          <span class="label label-info">Python</span>
+          <span class="label label-warning">Networking</span>
+          <span class="label label-primary">Security</span>
+        </p>
+
+        <hr>
+
+        <strong><i class="fa fa-file-text-o margin-r-5"></i> Notes</strong>
+
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam fermentum enim neque.</p>
+      </div>
+      <!-- /.box-body -->
+    </div>
+    <!-- /.box -->
+  </div>
+  <!-- /.col -->
+</div>
+<!-- /.row -->
+{% endblock %}
+
+{% block jsfile %}
+{% endblock %}
+
+{% block jsscript %}
+<script>
+  id = 1
+  $(document).ready(function () {
+    getUsers()
+  });
+
+  function reset() {
+    apiGET('reset', '', function (data) { alert(data.message); })
+  }
+
+  function getUsers() {
+    apiGET('brokenaccess/getuser/' + id, '', function (data) {
+        $('.profile-username').html(data[0][0] + ' ' + data[0][1]);
+        $('.profile-role').html(data[0][2]);
+    })
+  }
+
+
+</script>
+{% endblock %}

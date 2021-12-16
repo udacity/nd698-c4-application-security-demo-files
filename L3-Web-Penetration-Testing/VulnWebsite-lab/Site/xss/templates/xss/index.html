@@ -1,0 +1,150 @@
+{% extends "layout/insidepage.html" %}
+
+{% block cssfile %}
+{% endblock %}
+
+{% block content %}
+<div class="box">
+    <div class="box-body">
+        Page Controls:
+        <button type="button" class="btn btn-danger btn-xs" onclick="reset()">reset</button>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3">
+        <div class="box box-primary direct-chat direct-chat-primary" data-ol-has-click-handler="">
+            <div class="box-header with-border">
+                <h3 class="box-title">Direct Chat 1</h3>
+                <div class="box-tools pull-right"></div>
+            </div>
+            <div class="box-body">
+                <div id="direct-chat-messages1" class="direct-chat-messages"></div>
+            </div>
+            <div class="box-footer">
+                <form action="#" method="post">
+                    <div class="input-group">
+                        <input type="text" id="message1" name="message1" placeholder="Type Message ..."
+                            class="form-control">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-flat" onclick="sendMsg1()">Send</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="box box-primary direct-chat direct-chat-primary" data-ol-has-click-handler="">
+            <div class="box-header with-border">
+                <h3 class="box-title">Direct Chat 2</h3>
+                <div class="box-tools pull-right"></div>
+            </div>
+            <div class="box-body">
+                <div id="direct-chat-messages2" class="direct-chat-messages"></div>
+            </div>
+            <div class="box-footer">
+                <form action="#" method="post">
+                    <div class="input-group">
+                        <input type="text" id="message2" name="message2" placeholder="Type Message ..."
+                            class="form-control">
+                        <span class="input-group-btn">
+                            <button type="button" class="btn btn-primary btn-flat" onclick="sendMsg2()">Send</button>
+                        </span>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block jsfile %}
+{% endblock %}
+
+{% block jsscript %}
+
+<script src="//cdn.jsdelivr.net/npm/dompurify@2.1.1/dist/purify.min.js"></script>
+<script>
+    chat_id1 = 1;
+    chat_id2 = 2;
+    my_id = 2;
+    msgTemplate = '<div class="direct-chat-msg [[DIRECTION]]"><div class="direct-chat-info clearfix"><span class="direct-chat-name pull-right">[[NAME]]</span></div><img class="direct-chat-img" src="[[IMG]]" alt="Message User Image"><div class="direct-chat-text">[[MESSAGE]]</div></div>';
+
+    $(document).ready(function () {
+        loadMsgs();
+    });
+
+    function reset() {
+        apiGET('reset', '', function (data) { alert(data.message) })
+    }
+
+    function loadMsgs() {
+        loadMsg1();
+        loadMsg2();
+    }
+
+    function loadMsg1() {
+        $('#direct-chat-messages1').html('');
+        apiGET('xss/getMsg/' + chat_id1, '', function (data) {
+            $.each(data, function (index, d) {
+                user_id = d[1]
+                msg = d[2]
+                name = d[3]
+
+                tmpMSG = msgTemplate;
+                tmpMSG = tmpMSG.replace("[[DIRECTION]]", user_id != my_id ? '' : 'right')
+                tmpMSG = tmpMSG.replace("[[NAME]]", name)
+                tmpMSG = tmpMSG.replace("[[IMG]]", '/img/user2.png')
+                tmpMSG = tmpMSG.replace("[[MESSAGE]]", msg)
+
+                $('#direct-chat-messages1').append(tmpMSG);
+            });
+        })
+    }
+
+    function sendMsg1() {
+        postdata = {
+            "msg": $('#message1').val()
+        }
+
+        apiPOST('xss/sendMsg/' + chat_id1, '', postdata, function (data) {
+            $('#message1').val('')
+            loadMsg1();
+        });
+    }
+
+    function loadMsg2() {
+        init_msg = "{{ chat_msg }}"
+        $('#direct-chat-messages2').html('');
+        apiGET('xss/getMsg/' + chat_id2, '', function (data) {
+            $.each(data, function (index, d) {
+                user_id = d[1]
+                msg = d[2]
+                name = d[3]
+
+                tmpMSG = msgTemplate;
+                tmpMSG = tmpMSG.replace("[[DIRECTION]]", user_id != my_id ? '' : 'right')
+                tmpMSG = tmpMSG.replace("[[NAME]]", name)
+                tmpMSG = tmpMSG.replace("[[IMG]]", '/img/user2.png')
+                tmpMSG = tmpMSG.replace("[[MESSAGE]]", msg)
+
+                $('#direct-chat-messages2').append(tmpMSG);
+            });
+        })
+    }
+
+    function sendMsg2() {
+        postdata = {
+            "msg": $('#message2').val()
+        }
+
+        apiPOST('xss/sendMsg2/' + chat_id2, '', postdata, function (data) {
+            $('#message2').val('')
+            loadMsg2();
+        });
+    }
+</script>
+{% endblock %}

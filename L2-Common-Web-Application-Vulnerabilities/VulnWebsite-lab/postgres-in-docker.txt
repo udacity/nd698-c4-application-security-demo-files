@@ -1,0 +1,8 @@
+# Create
+sudo docker container run --name VulnWebsite -p 5432:5432 -e POSTGRES_PASSWORD=weakpasswordrule -d postgres
+psql -h localhost -U postgres
+CREATE DATABASE vulnwebsite;
+
+# Clean Up
+sudo docker container stop VulnWebsite
+sudo docker container prune
